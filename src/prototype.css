@@ -327,3 +327,97 @@
 .device-screen:has(.kiwoom) { overflow: clip; }
 /* Preserve landing state/entrance while chat is open; hidden content cannot intercept taps. */
 .kiwoom.confession-landing[data-covered="true"] { visibility: hidden; pointer-events: none; }
+
+/* Reflection and principle library share the chapel's restrained plum/pink palette. */
+.confession-header .principles-entry { margin-left: auto; position: relative; }
+.principles-entry small { position: absolute; top: 0; right: 0; min-width: 16px; height: 16px; display: grid; place-items: center; background: #c52f85; border-radius: 8px; font-size: 9px; }
+.reflection-steps { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 20px; padding: 10px 0; border-bottom: 1px solid #ffffff0e; }
+.reflection-steps span { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #817087; white-space: nowrap; }
+.reflection-steps b { display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: #332538; font-size: 9px; }
+.reflection-steps .active { color: #efb5d8; }
+.reflection-steps .active b { background: #683350; }
+.reflection-history.without-composer { padding-bottom: 70px; }
+.previous-principle { padding: 16px; border: 1px solid #685369; border-radius: 16px; background: #2c2332; margin-bottom: 26px; }
+.previous-principle span { display: flex; gap: 6px; align-items: center; font-size: 11px; color: #d6b983; }
+.previous-principle strong { display: block; font-size: 14px; line-height: 1.7; color: #f5d7a0; margin-top: 9px; }
+.previous-principle small { display: block; font-size: 10px; color: #b7a7bd; margin-top: 10px; line-height: 1.6; }
+.kiwoom .chat-suggestions .more-reasons { border: 0; color: #bca3bf; font-size: 11px; justify-content: center; min-height: 36px; }
+.reflection-result:not(:empty) { padding-top: 26px; }
+.reflection-card { border: 1px solid #634b62; border-radius: 22px; padding: 22px; background: linear-gradient(150deg,#35263b,#271d2e); animation: chat-message-in 300ms ease-out; }
+.reflection-eyebrow { display: flex; align-items: center; gap: 6px; color: #e7b1d2; font-size: 11px; }
+.reflection-card h2 { font-family: 'Noto Serif KR',serif; color: #f5dba9; font-size: 23px; line-height: 1.6; letter-spacing: -.06em; margin: 16px 0 12px; }
+.reflection-card p { color: #dbccdf; font-size: 13px; line-height: 1.8; margin: 10px 0 18px; overflow-wrap: anywhere; }
+.reflection-card small { display: block; color: #ad9ab7; font-size: 10px; line-height: 1.8; }
+.reflection-evidence { border-left: 2px solid #dca2c6; padding: 12px 13px; background: #ffffff05; margin: 20px 0 16px; border-radius: 0 12px 12px 0; }
+.reflection-evidence span { color: #ba9dbb; font-size: 10px; }
+.reflection-evidence blockquote { margin: 8px 0 0; font-size: 13px; color: #f2e8f4; line-height: 1.8; overflow-wrap: anywhere; }
+.reflection-card h3 { margin: 24px 0 13px; font-size: 13px; font-weight: 500; }
+.reflection-confirm { display: flex; gap: 9px; }
+.kiwoom .flow-primary, .kiwoom .flow-secondary { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 48px; border-radius: 13px; padding: 12px 14px; font-size: 12px; font-weight: 700; line-height: 1.5; }
+.kiwoom .flow-primary { background: #c52f85; color: #fff; }
+.kiwoom .flow-primary:disabled { background: #443344; color: #a08caa; cursor: default; }
+.kiwoom .flow-secondary { border: 1px solid #73596f; background: #ffffff04; color: #e9d8eb; }
+.reflection-confirm button { flex: 1; }
+.kiwoom .flow-text { display: block; padding: 14px 0; min-height: 44px; font-size: 11px; color: #cbb4d0; margin: 8px auto 0; }
+.correction-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0; }
+.kiwoom .correction-options button { display: flex; align-items: center; justify-content: space-between; padding: 12px 10px; min-height: 45px; border: 1px solid #604a64; border-radius: 11px; font-size: 11px; text-align: left; gap: 4px; }
+.kiwoom .correction-options button.selected { border-color: #ef9bcc; background: #583049; color: #ffe4f5; }
+.reflection-card .correction-description { font-size: 11px; color: #c5accb; }
+.principle-preview { margin: 24px 0 18px; padding: 17px; border-radius: 13px; background: #1d1624; border: 1px solid #79614c; font-size: 16px; font-weight: 500; color: #f5dba9; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.saved-card { text-align: center; }
+.saved-check { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; margin: 6px auto 22px; background: #573049; color: #ffd3ed; }
+.saved-card h2 { font-size: 21px; }
+.saved-card .flow-primary { width: 100%; margin-top: 24px; }
+.principles-content { padding: 0 21px 150px; }
+.principles-intro { margin: 10px 0 27px; }
+.principles-intro > span { font-size: 10px; letter-spacing: .15em; color: #c68caf; }
+.principles-intro h1 { font-size: 24px; font-family: 'Noto Serif KR',serif; font-weight: 700; line-height: 1.7; letter-spacing: -.05em; margin: 12px 0; }
+.principles-intro em { font-style: normal; color: #f4d79d; }
+.principles-intro p { color: #bba9c3; font-size: 12px; }
+.principles-list { display: grid; gap: 14px; }
+.kiwoom .principle-list-card { display: block; width: 100%; text-align: left; padding: 19px; border: 1px solid #58415a; border-radius: 19px; background: #2b2032; }
+.principle-card-top { display: flex; align-items: center; gap: 9px; color: #b09db9; margin-bottom: 14px; }
+.principle-card-top b { color: #ecc394; font-size: 14px; }
+.principle-card-top small { font-size: 10px; }
+.principle-card-top svg { margin-left: auto; }
+.principle-list-card > strong { display: block; font-size: 16px; line-height: 1.8; color: #f8e8f2; white-space: pre-wrap; overflow-wrap: anywhere; }
+.principle-category { display: inline-block; font-size: 10px; padding: 5px 9px; margin-top: 13px; border-radius: 7px; color: #e5b4d2; background: #503044; }
+.principle-list-card p { margin: 12px 0 0; font-size: 11px; line-height: 1.7; color: #b9a6c0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.principles-footer { position: absolute; z-index: 4; left: 0; right: 0; padding: 16px 21px 12px; background: #18121df5; border-top: 1px solid #ffffff0d; transition: bottom 260ms cubic-bezier(.2,.8,.2,1); }
+.principles-footer .flow-primary { width: 100%; min-height: 54px; font-size: 13px; }
+.principles-empty { text-align: center; padding: 65px 0 45px; }
+.principles-empty > div { display: grid; place-items: center; width: 78px; height: 78px; margin: 0 auto 27px; border-radius: 25px; background: #36233a; color: #dfa3c8; }
+.principles-empty > span { font-size: 11px; color: #b393b5; }
+.principles-empty h1 { font-family: 'Noto Serif KR',serif; font-size: 23px; line-height: 1.8; color: #f5dba9; letter-spacing: -.06em; margin: 15px 0 20px; }
+.principles-empty p { color: #bcaac4; font-size: 12px; line-height: 1.9; }
+.principles-storage { margin: 28px 0 0; text-align: center; color: #9c87a5; font-size: 10px; line-height: 1.8; }
+.principle-detail { padding-top: 17px; }
+.principle-detail h1 { color: #f5dba9; font-family: 'Noto Serif KR',serif; font-size: 24px; line-height: 1.8; letter-spacing: -.04em; margin: 19px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.principle-origin { margin-top: 30px; border-top: 1px solid #523a55; padding-top: 22px; }
+.principle-origin h2 { font-size: 13px; margin: 0 0 15px; color: #d8bfdc; }
+.principle-origin blockquote { margin: 0; padding: 15px; border-radius: 12px; background: #2b2131; font-size: 13px; line-height: 1.8; color: #e8d8eb; overflow-wrap: anywhere; }
+.principle-origin p { color: #b9a4c1; font-size: 12px; line-height: 1.9; margin: 15px 0; }
+.principle-origin .principle-previous { padding: 12px; border-left: 2px solid #9a6e91; font-size: 11px; }
+.principle-conversation { margin-top: 22px; padding: 15px; background: #241b2b; border-radius: 13px; }
+.principle-conversation summary { font-size: 12px; color: #ceabd2; cursor: pointer; min-height: 28px; }
+.principle-conversation div { margin-top: 16px; }
+.principle-conversation span { color: #987ca3; font-size: 10px; }
+.principle-conversation p { color: #bba5c4; font-size: 11px; line-height: 1.8; margin: 6px 0; }
+.principle-conversation blockquote { color: #e4d7ea; margin: 0; font-size: 12px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.principle-manage { display: flex; gap: 15px; margin-top: 20px; }
+.kiwoom .principle-manage button { padding: 12px 8px; color: #be9ec6; font-size: 11px; text-decoration: underline; text-underline-offset: 4px; }
+.principle-edit { margin-top: 24px; }
+.principle-edit label { display: block; color: #d3b3d9; font-size: 12px; margin-bottom: 10px; }
+.principle-edit > small { display: block; text-align: right; color: #ab90b6; font-size: 10px; margin-top: 6px; }
+.principle-delete { margin-top: 18px; padding: 17px; border: 1px solid #9b5b7d; border-radius: 14px; }
+.principle-delete p { color: #e6c2d4; font-size: 12px; line-height: 1.8; margin: 0 0 16px; }
+.principles-notice { color: #f5c9e7; background: #42253a; font-size: 12px; padding: 12px; border-radius: 10px; }
+.confession-chat button:focus-visible { outline: 2px solid #f2b4da; outline-offset: 3px; }
+@media (hover: hover) {
+  .kiwoom .flow-primary:hover { background: #d93d97; }
+  .kiwoom .principle-list-card:hover { border-color: #a27197; background: #332539; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reflection-card { animation: none; }
+  .principles-footer { transition: none; }
+}

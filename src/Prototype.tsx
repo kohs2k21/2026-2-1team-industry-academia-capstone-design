@@ -206,27 +206,85 @@ function ConfessionActions({ primaryRef, onStart, onRecords, onSaved, hasSaved }
   </div>;
 }
 
+type PrincipleCategory = 'follow' | 'rush' | 'missing' | 'confidence' | 'recovery' | 'concentration' | 'none' | 'unsure';
+const principleCategories: { id: PrincipleCategory; name: string; description: string; principle: string }[] = [
+  { id: 'follow', name: '뇌동매매죄', description: '다른 사람의 추천이 내 판단을 대신했던 선택이에요.', principle: '추천을 받아도 내 매수 이유를 먼저 적기.' },
+  { id: 'rush', name: '조급매수죄', description: '기회를 놓칠까 하는 조급함이 선택을 앞섰어요.', principle: '매수 전에 선택의 이유를 한 문장으로 정리하기.' },
+  { id: 'missing', name: '기준실종죄', description: '매수나 재검토를 위한 나만의 기준이 아직 없었어요.', principle: '매수 전에 투자 이유와 재검토할 조건을 정하기.' },
+  { id: 'confidence', name: '확신과잉죄', description: '내 예상과 다른 근거를 충분히 살피지 않았어요.', principle: '결정 전에 내 예상과 반대되는 근거 하나 확인하기.' },
+  { id: 'recovery', name: '손실만회죄', description: '이전 손실을 만회하고 싶은 마음이 다음 거래에 영향을 줬어요.', principle: '다음 거래의 이유를 이전 손실과 분리해서 적기.' },
+  { id: 'concentration', name: '집중과잉죄', description: '미리 정한 비중보다 한 종목에 더 집중했던 선택이에요.', principle: '추가 매수 전에 현재 비중과 내가 정한 기준 확인하기.' },
+  { id: 'none', name: '기준을 지킨 선택', description: '미리 세운 기준과 확인한 근거에 따라 선택했어요. 억지로 죄를 붙이지 않아요.', principle: '매수 전에 세운 기준과 판단 근거를 계속 기록하기.' },
+  { id: 'unsure', name: '조금 더 돌아볼 선택', description: '지금 이야기만으로는 선택의 이유를 단정하기 어려워요. 직접 맞는 정리를 골라도 괜찮아요.', principle: '다음 거래 전에 내가 선택하는 이유를 한 줄로 적기.' },
+];
+function categoryFor(id: PrincipleCategory) { return principleCategories.find(item => item.id === id)!; }
+type ReflectionAnswer = { question: string; text: string; hint?: PrincipleCategory };
+type ReflectionResult = { category: PrincipleCategory; evidence: string; explanation: string };
+type InvestmentPrinciple = { id: string; text: string; category: PrincipleCategory; evidence: string; explanation: string; answers: ReflectionAnswer[]; createdAt: string; updatedAt: string; previousPrinciple?: string };
+const principlesStorageKey = 'kiwoom-confession-principles-v1';
+function readPrinciples(): InvestmentPrinciple[] {
+  try {
+    const data: unknown = JSON.parse(localStorage.getItem(principlesStorageKey) || '[]');
+    if (!Array.isArray(data)) return [];
+    return data.filter((item): item is InvestmentPrinciple => item && typeof item.id === 'string' && typeof item.text === 'string' && item.text.trim() &&
+      principleCategories.some(category => category.id === item.category) && typeof item.evidence === 'string' && typeof item.explanation === 'string' &&
+      typeof item.createdAt === 'string' && Number.isFinite(Date.parse(item.createdAt)) && Array.isArray(item.answers) &&
+      item.answers.every((answer: ReflectionAnswer) => answer && typeof answer.question === 'string' && typeof answer.text === 'string'));
+  } catch { return []; }
+}
+// Mock interpretation considers the stated reason, never the price movement or P/L.
+function summarizeReflection(answers: ReflectionAnswer[]): ReflectionResult {
+  const reason = answers[1];
+  const criteria = answers[2];
+  let category: PrincipleCategory = reason.hint || 'unsure';
+  if (!reason.hint) {
+    const text = reason.text;
+    if (/추천|따라|주변|친구|커뮤니티/.test(text) && !/따르지|따라.*않|추천.*아니/.test(text)) category = 'follow';
+    else if (/놓칠|놓치|급하|급하게|조급|늦을|후회/.test(text)) category = 'rush';
+    else if (/만회|복구|본전/.test(text)) category = 'recovery';
+    else if (/반대.*(무시|안 봤)|무조건|확실|오를 수밖에/.test(text)) category = 'confidence';
+    else if (/몰빵|전부|비중.*(넘|초과)|한 종목.*집중/.test(text)) category = 'concentration';
+    else if (/근거|분석|계획|기준/.test(text) && !/없|안 |않/.test(text)) category = 'none';
+    if (/기준.*(확인|따라)|근거.*확인|분석.*확인|계획대로/.test(text) && !/무시|확인하지|안 |않|없/.test(text)) category = 'none';
+  }
+  const missingCriteria = criteria.hint === 'missing' || /기준.*없|정하지|계획.*없/.test(criteria.text);
+  const checkedCriteria = criteria.hint === 'none' || (/정했|세웠|계획|확인했/.test(criteria.text) && !/없|않|안 |확인하지/.test(criteria.text));
+  if (category === 'none' && !checkedCriteria) category = missingCriteria ? 'missing' : 'unsure';
+  if (category === 'unsure' && missingCriteria) category = 'missing';
+  const evidence = category === 'missing' ? criteria.text : reason.text;
+  return { category, evidence, explanation: categoryFor(category).description };
+}
+function principleDate(value: string) { return new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(value)); }
+
 function ConfessionLanding({ onBack, backButtonRef }: { onBack: () => void; backButtonRef: RefObject<HTMLButtonElement | null> }) {
   const keyboard = useKeyboard();
   const [topic, setTopic] = useState<ConfessionTopic | null>(null);
-  const [panel, setPanel] = useState<'chat' | 'trades' | null>(null);
+  const [panel, setPanel] = useState<'chat' | 'trades' | 'principles' | null>(null);
   const [trade, setTrade] = useState<string | null>(null);
-  const [savedPrinciple, setSavedPrinciple] = useState('');
+  const [principles, setPrinciples] = useState(readPrinciples);
+  const [storageAvailable, setStorageAvailable] = useState(true);
+  const [reviewPrinciple, setReviewPrinciple] = useState<InvestmentPrinciple | null>(null);
   const [backdropReady, setBackdropReady] = useState(false);
   const [mascotReady, setMascotReady] = useState(false);
   const primaryRef = useRef<HTMLButtonElement>(null);
-  const [showSaved, setShowSaved] = useState(false);
+  function updatePrinciples(next: InvestmentPrinciple[]) {
+    setPrinciples(next);
+    try { localStorage.setItem(principlesStorageKey, JSON.stringify(next)); setStorageAvailable(true); }
+    catch { setStorageAvailable(false); }
+  }
   function closePanel() { keyboard.hide(); setPanel(null); }
+  function showPrinciples() { keyboard.hide(); setPanel('principles'); }
   const previousPanel = useRef(panel);
   useEffect(() => {
     if (previousPanel.current !== null && panel === null) backButtonRef.current?.focus({ preventScroll: true });
     previousPanel.current = panel;
   }, [panel, backButtonRef]);
-  function start(selectedTopic = topic, selectedTrade: string | null = null) {
-    keyboard.hide(); setTopic(selectedTopic); setTrade(selectedTrade); setShowSaved(false); setPanel('chat');
+  function start(selectedTopic = topic, selectedTrade: string | null = null, previous = principles[0] || null) {
+    keyboard.hide(); setTopic(selectedTopic); setTrade(selectedTrade); setReviewPrinciple(previous); setPanel('chat');
   }
+  const covered = panel === 'chat' || panel === 'principles';
   return <>
-  <main className="kiwoom ai-landing confession-landing" aria-label="AI 고해성사 랜딩페이지" data-covered={panel === 'chat'} aria-hidden={panel === 'chat'} inert={panel === 'chat'}>
+  <main className="kiwoom ai-landing confession-landing" aria-label="AI 고해성사 랜딩페이지" data-covered={covered} aria-hidden={covered} inert={covered}>
     <MobileScroll className="confession-scroll">
       <div className="confession-scene" data-ready={backdropReady && mascotReady}>
         <ConfessionBackdrop onReady={() => setBackdropReady(true)} />
@@ -237,13 +295,13 @@ function ConfessionLanding({ onBack, backButtonRef }: { onBack: () => void; back
         <ConfessionTopicPicker topic={topic} onSelect={value => { setTopic(value); setTrade(null); }} />
         <ConfessionMotto />
         <ConfessionActions primaryRef={primaryRef} onStart={() => start()}
-          onRecords={() => { keyboard.hide(); setPanel('trades'); }}
-          onSaved={() => { keyboard.hide(); setShowSaved(true); setPanel('chat'); }} hasSaved={!!savedPrinciple} />
+          onRecords={() => { keyboard.hide(); setPanel('trades'); }} onSaved={showPrinciples} hasSaved={principles.length > 0} />
       </div>
     </MobileScroll>
     <header className="confession-header">
       <button ref={backButtonRef} className="icon-button" aria-label="뒤로가기" onClick={onBack}><ArrowLeftIcon size={28} weight="light" /></button>
       <span>투자 고해성사</span>
+      <button className="principles-entry icon-button" aria-label="나의 투자 원칙 보기" onClick={showPrinciples}><BookmarkSimpleIcon size={24} />{principles.length > 0 && <small>{principles.length}</small>}</button>
     </header>
     <BottomSheet open={panel === 'trades'} onOpenChange={open => { if (!open) closePanel(); }} title="마음에 남은 거래가 있나요?" description="시연용 예시 · 실제 매매 데이터 연결 없음" snap={0.75}>
       <div className="confession-sheet">
@@ -253,12 +311,14 @@ function ConfessionLanding({ onBack, backButtonRef }: { onBack: () => void; back
       </div>
     </BottomSheet>
   </main>
-  {panel === 'chat' && <ConfessionChat topic={topic} trade={trade} onBack={closePanel}
-    initialPrinciple={showSaved ? savedPrinciple : ''} onSave={setSavedPrinciple} />}
+  {panel === 'chat' && <ConfessionChat topic={topic} trade={trade} onBack={closePanel} previous={reviewPrinciple}
+    storageAvailable={storageAvailable} onSavedView={showPrinciples} onSave={value => updatePrinciples([value, ...principles])} />}
+  {panel === 'principles' && <InvestmentPrinciples principles={principles} storageAvailable={storageAvailable} onBack={closePanel}
+    onChange={updatePrinciples} onStart={previous => start(null, null, previous || principles[0] || null)} />}
   </>;
 }
 
-type ConfessionMessage = { id: number; role: 'ai' | 'user'; text: string; principle?: string };
+type ConfessionMessage = { id: number; role: 'ai' | 'user'; text: string };
 
 function ConfessionThinking() {
   return <div className="chat-thinking" role="status" aria-live="polite">
@@ -268,87 +328,194 @@ function ConfessionThinking() {
   </div>;
 }
 
-function ConfessionChat({ topic, trade, onBack, onSave, initialPrinciple }: {
-  topic: ConfessionTopic | null; trade: string | null; onBack: () => void; onSave: (value: string) => void; initialPrinciple: string;
+type ChatStage = 'interview' | 'thinking' | 'review' | 'correct' | 'principle' | 'saved';
+const reasonSuggestions: { text: string; hint: PrincipleCategory }[] = [
+  { text: '주변의 추천을 따랐고, 직접 확인하지 않았어요', hint: 'follow' },
+  { text: '오르는 가격을 보고 기회를 놓칠까 급하게 샀어요', hint: 'rush' },
+  { text: '제가 세운 기준과 근거를 확인하고 샀어요', hint: 'none' },
+  { text: '앞선 손실을 빨리 만회하고 싶었어요', hint: 'recovery' },
+  { text: '반대 근거가 있어도 제 예상이 확실하다고 생각했어요', hint: 'confidence' },
+  { text: '정해둔 비중을 넘겨 한 종목에 집중했어요', hint: 'concentration' },
+];
+
+function ReflectionCard({ result, onConfirm, onCorrect }: { result: ReflectionResult; onConfirm: () => void; onCorrect: () => void }) {
+  return <section className="reflection-card" aria-label="고백 정리 카드">
+    <span className="reflection-eyebrow"><SparkleIcon size={15} weight="fill" />고백 정리</span>
+    <h2>{categoryFor(result.category).name}</h2>
+    <p>{result.explanation}</p>
+    <div className="reflection-evidence"><span>이렇게 말씀해 주셨어요</span><blockquote>“{result.evidence}”</blockquote></div>
+    <small>수익이나 손실이 아닌 선택의 이유를 돌아보는 시연용 정리예요. 잘못을 단정하는 판단이 아닙니다.</small>
+    <h3>이 정리가 내 마음과 맞나요?</h3>
+    <div className="reflection-confirm"><button className="flow-primary" onClick={onConfirm}><CheckIcon size={17} />맞아요</button><button className="flow-secondary" onClick={onCorrect}>조금 달라요</button></div>
+  </section>;
+}
+
+function ConfessionChat({ topic, trade, onBack, onSave, onSavedView, previous, storageAvailable }: {
+  topic: ConfessionTopic | null; trade: string | null; onBack: () => void; onSave: (value: InvestmentPrinciple) => void;
+  onSavedView: () => void; previous: InvestmentPrinciple | null; storageAvailable: boolean;
 }) {
   const keyboard = useKeyboard();
   const { bottomInset, keyboardDragging } = useKeyboardInsets();
   const { device } = useMobileDevice();
+  const questions = [
+    previous ? '지난번에 남긴 원칙이 이번 선택에 어떻게 도움이 됐나요?' : trade ? `${trade} 거래에서 어떤 선택을 하셨나요?` : '최근 어떤 거래를 돌아보고 싶으세요?',
+    '그 선택을 하게 된 가장 큰 이유는 무엇이었나요?',
+    '거래 전에 매수나 재검토를 위한 기준을 정해두셨나요?',
+  ];
   const [draft, setDraft] = useState('');
-  const [thinking, setThinking] = useState(false);
-  const [saved, setSaved] = useState(initialPrinciple);
-  const [messages, setMessages] = useState<ConfessionMessage[]>(() => [{ id: 0, role: 'ai',
-    text: initialPrinciple ? '지난 대화에서 남겨둔 투자 원칙이에요. 더 이야기하고 싶은 점이 있나요?'
-      : `${trade ? `${trade} 거래를 함께 돌아볼게요.` : topic ? `${topic === 'average' ? '추가 매수 기준' : '매수 타이밍'}에 대해 이야기해 볼까요?` : '안녕하세요. 투자 고해성사에 오신 걸 환영해요.'}\n선택의 이유를 돌아보며 나만의 투자 기준을 함께 정리해 봐요. 최근 매수할 때 어떤 마음이었나요?`,
-    principle: initialPrinciple || undefined,
-  }]);
+  const [hint, setHint] = useState<PrincipleCategory | undefined>();
+  const [stage, setStage] = useState<ChatStage>('interview');
+  const [answers, setAnswers] = useState<ReflectionAnswer[]>([]);
+  const [result, setResult] = useState<ReflectionResult | null>(null);
+  const [correctionCategory, setCorrectionCategory] = useState<PrincipleCategory>('unsure');
+  const [moreReasons, setMoreReasons] = useState(false);
+  const [messages, setMessages] = useState<ConfessionMessage[]>(() => [{ id: 0, role: 'ai', text: `안녕하세요. 선택의 이유를 나누며 나만의 투자 기준을 함께 세워볼게요.\n${questions[0]}` }]);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const busy = useRef(false);
   const nextId = useRef(1);
   const endRef = useRef<HTMLDivElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
   const backRef = useRef<HTMLButtonElement>(null);
-  const suggestions = topic === 'average'
-    ? ['처음 세운 계획에 따른 추가 매수였어요', '평균 매수가를 낮추고 싶었어요', '다시 오를 것 같아 급하게 샀어요']
-    : ['놓치면 후회할 것 같았어요', '제 기준에 맞는지 먼저 확인했어요', '주변에서 좋다고 해서 샀어요'];
   useEffect(() => {
     backRef.current?.focus({ preventScroll: true });
     return () => { if (timer.current) clearTimeout(timer.current); };
   }, []);
   useEffect(() => {
     const scroll = endRef.current?.closest('.mobile-scroll');
-    scroll?.scrollTo({ top: scroll.scrollHeight, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
-  }, [messages, thinking]);
+    if (!scroll) return;
+    const top = ['review', 'correct', 'principle', 'saved'].includes(stage) && resultRef.current
+      ? resultRef.current.offsetTop - device.geometry.safeArea.top - 100 : scroll.scrollHeight;
+    scroll.scrollTo({ top, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  }, [messages, stage, moreReasons, device.geometry.safeArea.top]);
+  const questionIndex = answers.length;
+  const suggestions: { text: string; hint?: PrincipleCategory }[] = questionIndex === 0
+    ? (previous ? ['원칙을 확인한 뒤 거래했어요', '원칙을 세웠지만 이번에는 지키지 못했어요', '이번에는 거래하지 않고 기다렸어요']
+      : topic === 'average' ? ['보유 중인 종목을 추가 매수했어요', '추가 매수할지 고민하다 기다렸어요', '일부를 매도했어요'] : ['새로운 종목을 매수했어요', '보유 중인 종목을 추가 매수했어요', '매수하지 않고 기다렸어요']).map(text => ({ text }))
+    : questionIndex === 1 ? moreReasons ? reasonSuggestions : reasonSuggestions.slice(0, 3)
+      : [{ text: '투자 이유와 재검토 조건을 미리 정했어요', hint: 'none' }, { text: '정해둔 기준은 없었어요', hint: 'missing' }, { text: '기준은 있었지만 이번에는 확인하지 않았어요', hint: 'unsure' }];
+  function append(role: 'ai' | 'user', text: string) { setMessages(current => [...current, { id: nextId.current++, role, text }]); }
+  function confirm() {
+    keyboard.hide();
+    setDraft(categoryFor(result!.category).principle); setStage('principle');
+  }
   function submit() {
     const text = draft.trim();
-    if (!text || busy.current) return;
-    keyboard.hide(); busy.current = true; setThinking(true); setDraft('');
-    setMessages(current => [...current, { id: nextId.current++, role: 'user', text }]);
-    // Frontend-only demo latency; cancel on unmount. No real AI request is sent.
+    if (busy.current || (stage !== 'correct' && !text)) return;
+    keyboard.hide();
+    if (stage === 'principle') {
+      busy.current = true;
+      const now = new Date().toISOString();
+      onSave({ id: crypto.randomUUID(), text, category: result!.category, evidence: result!.evidence,
+        explanation: result!.explanation, answers, createdAt: now, updatedAt: now, previousPrinciple: previous?.text });
+      setDraft(''); setStage('saved'); return;
+    }
+    if (stage === 'correct') {
+      if (text) append('user', text);
+      setResult({ category: correctionCategory, evidence: text || result!.evidence,
+        explanation: categoryFor(correctionCategory).description });
+      setDraft(''); setStage('review'); return;
+    }
+    if (stage !== 'interview') return;
+    const next = [...answers, { question: questions[questionIndex], text, hint }];
+    setAnswers(next); append('user', text); setDraft(''); setHint(undefined); setMoreReasons(false);
+    if (next.length < 3) { append('ai', questions[next.length]); return; }
+    busy.current = true; setStage('thinking');
+    // Five-second demo latency, cancelled on back/unmount. No AI or network request.
     timer.current = setTimeout(() => {
-      const principle = /계획|기준/.test(text)
-        ? '매수하기 전, 내 기준에 맞는 이유를 한 줄로 남기기.'
-        : topic === 'average' || /추가|평균|물타기/.test(text)
-          ? '추가 매수 전, 처음 투자한 이유가 여전히 유효한지 확인하기.'
-          : '매수하기 전, 내가 사려는 이유와 감당할 수 있는 손실 범위를 적기.';
-      setMessages(current => [...current, { id: nextId.current++, role: 'ai',
-        text: '이야기해 주셔서 고마워요. 다음 선택 전에 확인할 기준을 하나 정리해 봤어요. 나에게 맞는지 살펴보고, 바꾸고 싶은 점도 이야기해 주세요.', principle }]);
-      busy.current = false; setThinking(false); timer.current = null;
+      setResult(summarizeReflection(next)); busy.current = false; setStage('review'); timer.current = null;
     }, 5000);
   }
+  const editable = stage === 'interview' || stage === 'correct' || stage === 'principle';
+  const maxLength = stage === 'principle' ? 160 : 500;
+  const step = stage === 'interview' || stage === 'thinking' ? 0 : stage === 'review' || stage === 'correct' ? 1 : 2;
   return <main className="kiwoom confession-chat" aria-label="투자 고해성사 AI 채팅">
     <header className="chat-header" style={{ paddingTop: device.geometry.safeArea.top }}>
       <button ref={backRef} className="icon-button" aria-label="고해성사 랜딩으로 돌아가기" onClick={() => { keyboard.hide(); onBack(); }}><ArrowLeftIcon size={24} /></button>
       <div><strong>투자 고해성사</strong><span><i />키움 AI와 함께 만드는 나만의 기준</span></div>
     </header>
     <MobileScroll className="chat-scroll">
-      <div className="chat-history" style={{ paddingTop: device.geometry.safeArea.top + 84 }}>
-        <p className="chat-demo-note">프로토타입 · AI 응답은 시연용 예시입니다</p>
+      <div className={`chat-history reflection-history ${editable ? '' : 'without-composer'}`} style={{ paddingTop: device.geometry.safeArea.top + 84 }}>
+        <div className="reflection-steps" aria-label={`진행 단계 ${step + 1}/3`}>{['이야기 나누기', '고백 정리', '원칙 남기기'].map((label, index) => <span key={label} className={index <= step ? 'active' : ''} aria-current={index === step ? 'step' : undefined}><b>{index < step ? <CheckIcon size={10} /> : index + 1}</b>{label}</span>)}</div>
+        <p className="chat-demo-note">프로토타입 · AI 응답과 분류는 시연용입니다</p>
+        {previous && <aside className="previous-principle"><span><BookmarkSimpleIcon size={14} />지난번에 남긴 나의 원칙</span><strong>{previous.text}</strong><small>이 기준을 이번 선택에 어떻게 적용했는지 돌아봐요.</small></aside>}
         <div className="chat-messages" role="log" aria-label="AI와의 대화" aria-live="polite" aria-relevant="additions">
           {messages.map(message => <div key={message.id} className={`chat-message chat-message-${message.role}`}>
             {message.role === 'ai' && <span className="chat-author"><SparkleIcon size={16} weight="fill" />키움 AI</span>}
-            <div className="chat-bubble"><p>{message.text}</p>
-              {message.principle && <div className="chat-principle"><span>나를 위한 투자 기준</span><strong>{message.principle}</strong>
-                <button disabled={saved === message.principle} onClick={() => { setSaved(message.principle!); onSave(message.principle!); }}>
-                  {saved === message.principle ? <><CheckIcon size={17} />나의 원칙으로 저장했어요</> : <><BookmarkSimpleIcon size={17} />나의 투자 원칙으로 남기기</>}
-                </button>
-              </div>}
-            </div>
+            <div className="chat-bubble"><p>{message.text}</p></div>
           </div>)}
         </div>
-        {messages.length === 1 && !initialPrinciple && <div className="chat-suggestions" role="group" aria-label="추천 답변">
-          <p>가까운 답변을 고르거나 직접 입력해 주세요</p>
-          {suggestions.map(value => <button key={value} aria-pressed={draft === value} className={draft === value ? 'is-selected' : ''} onClick={() => { keyboard.hide(); setDraft(value); }}>{value}{draft === value && <CheckIcon size={16} />}</button>)}
+        {stage === 'interview' && <div className="chat-suggestions" role="group" aria-label="추천 답변">
+          <p>질문 {questionIndex + 1}/3 · 가까운 답변을 고르거나 직접 입력해 주세요</p>
+          {suggestions.map(value => <button key={value.text} aria-pressed={draft === value.text} className={draft === value.text ? 'is-selected' : ''} onClick={() => { keyboard.hide(); setDraft(value.text); setHint(value.hint); }}>{value.text}{draft === value.text && <CheckIcon size={16} />}</button>)}
+          {questionIndex === 1 && <button className="more-reasons" aria-expanded={moreReasons} onClick={() => setMoreReasons(!moreReasons)}>{moreReasons ? '다른 이유 접기' : '다른 이유도 살펴보기'}<CaretDownIcon size={15} /></button>}
         </div>}
-        {thinking && <ConfessionThinking />}
+        {stage === 'thinking' && <ConfessionThinking />}
+        <div ref={resultRef} className="reflection-result">
+          {stage === 'review' && result && <ReflectionCard result={result} onConfirm={confirm} onCorrect={() => { keyboard.hide(); setDraft(''); setCorrectionCategory(result.category); setStage('correct'); }} />}
+          {stage === 'correct' && <section className="reflection-card"><span className="reflection-eyebrow">내 마음에 맞게 고치기</span><h2>어떤 정리가 더 가까운가요?</h2><p>분류를 고르고, 다르게 느낀 점을 자유롭게 적어주세요.</p>
+            <div className="correction-options" role="group" aria-label="고백 분류 수정">{principleCategories.map(item => <button key={item.id} aria-pressed={correctionCategory === item.id} className={correctionCategory === item.id ? 'selected' : ''} onClick={() => { keyboard.hide(); setCorrectionCategory(item.id); }}>{item.name}{correctionCategory === item.id && <CheckIcon size={14} />}</button>)}</div>
+            <p className="correction-description">{categoryFor(correctionCategory).description}</p><button className="flow-text" onClick={() => { keyboard.hide(); setDraft(''); setStage('review'); }}>기존 정리로 돌아가기</button>
+          </section>}
+          {stage === 'principle' && result && <section className="reflection-card"><span className="reflection-eyebrow"><BookmarkSimpleIcon size={15} />나만의 기준 만들기</span><h2>오늘의 고백을<br />내일의 원칙으로.</h2><p>아래 입력창에서 나의 말로 바꿔보세요.<br />실천할 수 있는 작은 기준 하나면 충분해요.</p>
+            <blockquote className="principle-preview">{draft || '나에게 맞는 투자 원칙을 적어주세요.'}</blockquote><small>확인한 정리 · {categoryFor(result.category).name}</small>
+            <button className="flow-text" onClick={() => { keyboard.hide(); setDraft(''); setStage('review'); }}>고백 정리 다시 보기</button>
+          </section>}
+          {stage === 'saved' && <section className="reflection-card saved-card" role="status"><span className="saved-check"><CheckIcon size={30} /></span><h2>나의 원칙으로 남겼어요.</h2><p>다음 선택을 앞두고 다시 꺼내보세요.<br />다음 대화에서도 이 기준을 함께 돌아볼게요.</p><small>{storageAvailable ? '이 브라우저에 저장됩니다. 새로고침해도 유지돼요.' : '브라우저 저장이 제한되어 현재 화면에서만 유지돼요.'}</small><button className="flow-primary" onClick={() => { keyboard.hide(); onSavedView(); }}><BookmarkSimpleIcon size={18} />나의 투자 원칙 보기</button><button className="flow-text" onClick={onBack}>고해성사 홈으로 돌아가기</button></section>}
+        </div>
         <div ref={endRef} />
       </div>
     </MobileScroll>
-    <form className="chat-composer" style={{ bottom: bottomInset, transition: keyboardDragging ? 'none' : undefined }} onSubmit={event => { event.preventDefault(); submit(); }}>
-      <div className="chat-input-wrap"><KeyboardTextarea aria-label="투자 이야기 직접 입력" placeholder="그때의 생각을 자유롭게 적어주세요" rows={2} maxLength={500} value={draft}
-        onChange={event => setDraft(event.target.value)} onBlur={() => keyboard.hide()}
+    {editable && <form className="chat-composer" style={{ bottom: bottomInset, transition: keyboardDragging ? 'none' : undefined }} onSubmit={event => { event.preventDefault(); submit(); }}>
+      <div className="chat-input-wrap"><KeyboardTextarea aria-label={stage === 'principle' ? '나의 투자 원칙 입력' : stage === 'correct' ? '고백 정리 수정 의견' : '투자 이야기 직접 입력'} placeholder={stage === 'principle' ? '내가 실천할 투자 원칙을 적어주세요' : stage === 'correct' ? '다르게 느낀 점을 적어주세요 (선택)' : '그때의 생각을 자유롭게 적어주세요'} rows={2} maxLength={maxLength} value={draft}
+        onChange={event => { setDraft(event.target.value); setHint(undefined); }} onBlur={() => keyboard.hide()}
         onKeyDown={event => { if (event.key === 'Escape') { keyboard.hide(); return; } if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); submit(); } }} />
       </div>
-      <div className="chat-composer-actions"><span>{draft.length}/500</span><button type="submit" onPointerDown={event => { if (event.button === 0) event.preventDefault(); }} disabled={!draft.trim() || thinking}>{thinking ? '생각하는 중…' : messages.length === 1 ? '이 이야기로 돌아보기' : '보내기'}<ArrowRightIcon size={18} /></button></div>
-    </form>
+      <div className="chat-composer-actions"><span>{draft.length}/{maxLength}</span><button type="submit" onPointerDown={event => { if (event.button === 0) event.preventDefault(); }} disabled={stage !== 'correct' && !draft.trim()}>{stage === 'principle' ? '나의 투자 원칙으로 남기기' : stage === 'correct' ? '이 정리로 수정하기' : questionIndex === 2 ? '돌아보기' : '보내기'}<ArrowRightIcon size={18} /></button></div>
+    </form>}
+  </main>;
+}
+
+function InvestmentPrinciples({ principles, storageAvailable, onBack, onStart, onChange }: {
+  principles: InvestmentPrinciple[]; storageAvailable: boolean; onBack: () => void;
+  onStart: (previous?: InvestmentPrinciple) => void; onChange: (next: InvestmentPrinciple[]) => void;
+}) {
+  const keyboard = useKeyboard();
+  const { device } = useMobileDevice();
+  const { bottomInset, keyboardDragging } = useKeyboardInsets();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [notice, setNotice] = useState('');
+  const backRef = useRef<HTMLButtonElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const selected = principles.find(item => item.id === selectedId);
+  useEffect(() => { backRef.current?.focus({ preventScroll: true }); }, []);
+  useEffect(() => {
+    scrollRef.current?.closest('.mobile-scroll')?.scrollTo({ top: 0, behavior: 'instant' });
+    backRef.current?.focus({ preventScroll: true });
+  }, [selectedId]);
+  function closeDetail() { keyboard.hide(); setSelectedId(null); setEditing(false); setDeleting(false); }
+  function saveEdit() {
+    if (!selected || !draft.trim()) return;
+    keyboard.hide(); onChange(principles.map(item => item.id === selected.id ? { ...item, text: draft.trim(), updatedAt: new Date().toISOString() } : item));
+    setEditing(false); setNotice('원칙을 수정했어요.');
+  }
+  return <main className="kiwoom confession-chat principles-page" aria-label="나의 투자 원칙">
+    <header className="chat-header" style={{ paddingTop: device.geometry.safeArea.top }}><button ref={backRef} className="icon-button" aria-label={selected ? '투자 원칙 목록으로 돌아가기' : '고해성사 랜딩으로 돌아가기'} onClick={selected ? closeDetail : onBack}><ArrowLeftIcon size={24} /></button><div><strong>{selected ? '원칙 돌아보기' : '나의 투자 원칙'}</strong><span>{selected ? '나의 선택에서 시작된 작은 다짐' : `${principles.length}개의 원칙 · 다음 선택을 위한 나만의 기준`}</span></div></header>
+    <MobileScroll className="principles-scroll"><div ref={scrollRef} className="principles-content" style={{ paddingTop: device.geometry.safeArea.top + 92 }}>
+      {notice && <p className="principles-notice" role="status">{notice}</p>}
+      {!selected && principles.length === 0 && <section className="principles-empty"><div><BookmarkSimpleIcon size={36} weight="duotone" /></div><span>아직 비어 있는 나의 기준</span><h1>첫 번째 투자 원칙을<br />함께 만들어볼까요?</h1><p>AI와 선택의 이유를 돌아보고,<br />다음 거래에 지킬 작은 다짐을 남겨보세요.</p></section>}
+      {!selected && principles.length > 0 && <><div className="principles-intro"><span>MY PRINCIPLES</span><h1>흔들리는 순간,<br /><em>나의 기준을 꺼내보세요.</em></h1><p>고백에서 시작된 다짐들을 모았어요.</p></div><div className="principles-list">{principles.map((item, index) => <button className="principle-list-card" key={item.id} aria-label={`투자 원칙 ${index + 1}: ${item.text}`} onClick={() => { keyboard.hide(); setNotice(''); setSelectedId(item.id); }}><span className="principle-card-top"><b>{String(principles.length - index).padStart(2, '0')}</b><small>{principleDate(item.createdAt)}</small><CaretRightIcon size={18} /></span><strong>{item.text}</strong><span className="principle-category">{categoryFor(item.category).name}</span><p>{item.evidence}</p></button>)}</div></>}
+      {selected && <article className="principle-detail"><span className="reflection-eyebrow">{principleDate(selected.createdAt)}에 남긴 원칙</span><h1>{selected.text}</h1><span className="principle-category">{categoryFor(selected.category).name}</span>
+        {editing && <section className="principle-edit"><label htmlFor="principle-edit">나의 말로 다시 다듬기</label><div className="chat-input-wrap"><KeyboardTextarea id="principle-edit" aria-label="저장한 투자 원칙 수정" rows={3} maxLength={160} value={draft} onChange={event => setDraft(event.target.value)} onBlur={() => keyboard.hide()} onKeyDown={event => { if (event.key === 'Escape') keyboard.hide(); }} /></div><small>{draft.length}/160</small><button className="flow-text" onClick={() => { keyboard.hide(); setEditing(false); }}>수정 취소</button></section>}
+        <section className="principle-origin"><h2>이 원칙이 시작된 이야기</h2><blockquote>“{selected.evidence}”</blockquote><p>{selected.explanation}</p>{selected.previousPrinciple && <p className="principle-previous">지난 원칙을 돌아보며 남겼어요<br />{selected.previousPrinciple}</p>}</section>
+        <details className="principle-conversation"><summary>함께 나눈 대화 보기</summary>{selected.answers.map((answer, index) => <div key={index}><span>질문 {index + 1}</span><p>{answer.question}</p><blockquote>{answer.text}</blockquote></div>)}</details>
+        <div className="principle-manage"><button onClick={() => { keyboard.hide(); setDraft(selected.text); setEditing(true); setDeleting(false); setNotice(''); }}>원칙 수정</button><button onClick={() => { keyboard.hide(); setDeleting(true); setEditing(false); }}>원칙 삭제</button></div>
+        {deleting && <section className="principle-delete" role="alert"><p>이 원칙을 삭제할까요?<br />저장된 원칙과 함께 나눈 대화가 삭제돼요.</p><div className="reflection-confirm"><button className="flow-secondary" onClick={() => setDeleting(false)}>취소</button><button className="flow-primary" onClick={() => { onChange(principles.filter(item => item.id !== selected.id)); closeDetail(); setNotice('원칙을 삭제했어요.'); }}>삭제하기</button></div></section>}
+      </article>}
+      <p className="principles-storage">{storageAvailable ? '이 브라우저에만 저장돼요 · 실제 계좌·AI 연결 없음' : '브라우저 저장이 제한되어 현재 화면에서만 유지돼요'}</p>
+    </div></MobileScroll>
+    <footer className="principles-footer" style={{ bottom: bottomInset, transition: keyboardDragging ? 'none' : undefined }}><button className="flow-primary" disabled={editing && !draft.trim()} onPointerDown={event => { if (event.button === 0) event.preventDefault(); }} onClick={() => { keyboard.hide(); if (editing) saveEdit(); else onStart(selected); }}>{editing ? '수정한 원칙 저장하기' : selected ? '이 원칙으로 다시 돌아보기' : principles.length > 0 ? '새로운 투자 돌아보기' : '나의 투자 돌아보기'}<ArrowRightIcon size={19} /></button></footer>
   </main>;
 }
