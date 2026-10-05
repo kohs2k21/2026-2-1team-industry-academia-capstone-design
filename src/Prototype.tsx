@@ -313,7 +313,7 @@ function ConfessionChat({ topic, trade, onBack, onSave, initialPrinciple }: {
       setMessages(current => [...current, { id: nextId.current++, role: 'ai',
         text: '이야기해 주셔서 고마워요. 다음 선택 전에 확인할 기준을 하나 정리해 봤어요. 나에게 맞는지 살펴보고, 바꾸고 싶은 점도 이야기해 주세요.', principle }]);
       busy.current = false; setThinking(false); timer.current = null;
-    }, 2400);
+    }, 5000);
   }
   return <main className="kiwoom confession-chat" aria-label="투자 고해성사 AI 채팅">
     <header className="chat-header" style={{ paddingTop: device.geometry.safeArea.top }}>
