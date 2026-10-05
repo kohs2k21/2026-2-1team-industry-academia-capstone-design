@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "dist", "client");
-const repository = (process.env.GITHUB_REPOSITORY ?? "2026-2-1team-industry-academia-capstone-design").split("/").at(-1);
+const repository = (process.env.GITHUB_REPOSITORY ?? "2026-2-1team-regional-industry-academia-collaborative-capstone-design2").split("/").at(-1);
 if (!repository || !/^[a-zA-Z0-9._-]+$/.test(repository)) throw new Error("Invalid repository name");
 const base = `/${repository}/`;
 

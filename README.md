@@ -9,4 +9,4 @@
 - 런타임 검증: `npm run check:runtime`
 - Pages 빌드: `npm run build:pages`
 - 배포: `main`에 푸시하면 GitHub Actions가 자동 배포
-- [공개 데모](https://kohs2k21.github.io/2026-2-1team-industry-academia-capstone-design/)
+- [공개 데모](https://kohs2k21.github.io/2026-2-1team-regional-industry-academia-collaborative-capstone-design2/)
