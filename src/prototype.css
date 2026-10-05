@@ -1,0 +1,329 @@
+/* Reference: IMG_0581.PNG, 1170 × 2532. App coordinates use a 393 px screen. */
+.kiwoom {
+  --surface: #111111; --text: #c3c3c3; --muted: #686868; --line: #606060; --pink: #bc347c; --blue: #3885ed;
+  position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden;
+  color: var(--text); background: var(--surface); font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -.35px;
+  -webkit-font-smoothing: antialiased; container-type: inline-size;
+}
+.kiwoom button, .kiwoom-sheet button { appearance: none; font: inherit; color: inherit; border: 0; background: transparent; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.kiwoom button:active { filter: brightness(1.3); }
+.kiwoom button:focus-visible, .kiwoom-sheet button:focus-visible { outline: 2px solid #3885ed; outline-offset: -2px; }
+.kiwoom .icon-button { display: flex; justify-content: center; align-items: center; }
+.device-screen:has(.kiwoom) .status-bar { color: #fff; }
+.device-screen:has(.kiwoom) .status-indicator-svg, .device-screen:has(.kiwoom) .home-indicator-svg { filter: invert(1); }
+.main-header { height: 27.66cqw; flex-shrink: 0; display: flex; align-items: center; padding-top: 11.85cqw; background: #1e1e1e; }
+.main-header .back { width: 13.2cqw; flex-shrink: 0; }
+.main-header .more { width: 8.2cqw; margin-left: auto; flex-shrink: 0; color: white; }
+.top-tabs { display: flex; height: 100%; align-items: center; justify-content: space-between; flex: 1; gap: 4.7cqw; white-space: nowrap; }
+.top-tabs button { position: relative; color: #666; font-size: 3.9cqw; font-weight: 700; letter-spacing: -.5px; }
+.top-tabs button.active { color: #f9f9f9; }
+.voice-icon { position: absolute; top: -4.4cqw; right: -.6cqw; }
+.balance-tabs { display: flex; height: 11.15cqw; flex-shrink: 0; border-bottom: 1px solid #595959; }
+.balance-tabs button { position: relative; flex: 1; font-size: 3.95cqw; font-weight: 700; }
+.balance-tabs .selected::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: #c5c5c5; }
+.edge-handle { position: absolute; z-index: 3; top: 29.1cqw; left: -4px; width: 3.5cqw; height: 13.4cqw; background: #312d62 !important; border-radius: 0 7px 7px 0; border-right: 1px solid #393475 !important; }
+.edge-handle::after { content: ''; position: absolute; right: 5px; top: 34%; height: 34%; width: 1px; background: #6761b5; }
+.account-toolbar { display: flex; flex-shrink: 0; gap: 1.75cqw; margin: 2.3cqw 2.25cqw 1.75cqw; height: 10cqw; }
+.kiwoom .outline { border: 1px solid var(--line); border-radius: 4px; display: flex; justify-content: center; align-items: center; }
+.notice, .overseas { flex-shrink: 0; width: 9.95cqw; font-size: 3.65cqw !important; }
+.overseas { line-height: 1.1 !important; }
+.account-selector { flex: 1; min-width: 0; gap: 1.4cqw; padding: 0 1.8cqw !important; font-size: 4.08cqw !important; white-space: nowrap; }
+.account-selector span { overflow: hidden; text-overflow: ellipsis; }
+.account-selector svg { flex-shrink: 0; }
+.refresh { width: 9.95cqw; flex-shrink: 0; color: var(--pink) !important; border-color: var(--pink) !important; }
+.balance-card { flex-shrink: 0; margin: 0 2.25cqw; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.profit-row { display: flex; align-items: center; width: 100%; height: 13.15cqw; padding: 0 2.3cqw 0 2cqw !important; gap: 2.5cqw; }
+.profit-row strong { font-size: 4cqw; font-weight: 700; }
+.profit-row b { margin-left: auto; font-size: 4.95cqw; font-weight: 700; }
+.profit-row > span { min-width: 19.8cqw; text-align: right; font-size: 3.9cqw; font-weight: 500; }
+.profit-row > svg { color: #656565; }
+.balance-details { border-top: 1px solid #333; display: grid; grid-template-columns: 1fr 1fr; height: 17.4cqw; font-size: 3.65cqw; }
+.balance-details > div { display: grid; grid-template-columns: 1fr auto; grid-template-rows: 1fr 1fr; align-items: center; padding: 1.5cqw .8cqw 1.5cqw 2cqw; }
+.balance-details > div + div { border-left: 1px solid #333; padding-left: 1.5cqw; }
+.balance-details > div > span:nth-child(even) { font-size: 4.2cqw; }
+.estimated { display: flex; gap: .8cqw; align-items: center; white-space: nowrap; }
+.estimated svg { color: #878787; }
+.ranking { display: flex; align-items: center; width: calc(100% - 5px); height: 9.65cqw; margin-left: 2px; border-top: 1px solid #232323 !important; padding: 0 2.2cqw 0 1.5cqw !important; gap: 3.3cqw; font-size: 3.62cqw !important; white-space: nowrap; }
+.ranking > span { font-weight: 500; }
+.ranking strong { font-weight: 700; }
+.ranking > svg { margin-left: auto; color: #888; flex-shrink: 0; }
+.investment-toolbar { flex-shrink: 0; display: flex; gap: 1.7cqw; margin: 2.3cqw 2.25cqw 2.25cqw; height: 10cqw; font-size: 3.6cqw; font-weight: 700; }
+.tools { width: 24cqw; gap: 1cqw; white-space: nowrap; }
+.tools svg { color: #e23687; }
+.sell { width: 19.6cqw; color: var(--blue) !important; border-color: #4582c8 !important; }
+.credit-toggle { display: flex; flex: 1; border: 1px solid var(--line); border-radius: 4px; }
+.credit-toggle button { flex: 1; min-width: 0; color: #737373; white-space: nowrap; }
+.credit-toggle .selected { background: #25242a; color: var(--text); box-shadow: 0 0 0 1px #c3c3c3; border-radius: 3px; }
+.row-toggle { width: 16cqw; justify-content: space-between !important; padding: 0 1.5cqw 0 2cqw !important; }
+.row-dots { display: grid; gap: 3px; }
+.row-dots span { height: 4px; width: 4px; border-radius: 50%; background: #4a4a4a; }
+.row-dots .on { background: #aa326e; }
+.holdings-header { position: relative; flex-shrink: 0; height: 13.35cqw; background: #262626; border-bottom: 1px solid #626262; }
+.table-columns { display: grid; grid-template-columns: 30% 22.5% 22.5% 25%; height: 100%; }
+.table-columns button { position: relative; display: flex; flex-direction: column; justify-content: center; font-size: 3.6cqw; font-weight: 600; }
+.table-columns button > span { width: 100%; display: flex; align-items: center; justify-content: center; flex: 1; }
+.table-columns button > span + span { border-top: 1px solid #292929; }
+.table-settings { position: absolute; top: 1px; left: 1px; z-index: 1; color: #747474 !important; }
+.sort-mark { position: absolute; right: -1px; color: #979797; transform: rotate(135deg); width: 7px; height: 7px; }
+.sort-mark.sorted { color: #bc347c; }
+.next-columns { position: absolute; right: 1px; top: calc(50% - 6px); color: #c93684 !important; filter: drop-shadow(-2px 0 1px #131313); }
+.next-columns svg { transform: rotate(90deg); }
+.single-row { height: 7cqw; }
+.holdings-scroll, .alternate-scroll { position: relative !important; flex: 1; min-height: 0; background: #111; }
+.empty-holdings { min-height: 280px; }
+.app-footer { margin-top: auto; flex-shrink: 0; background: #111; }
+.market-strip { height: 8cqw; display: flex; align-items: center; padding: 0 3cqw 0 1.6cqw; background: #222; border: 1px solid #303030; border-radius: 11px 11px 0 0; box-shadow: inset 0 1px 2px #2a2a2a; }
+.index-chat { display: flex; align-items: center; height: 5.5cqw; border: 1px solid #428cf6 !important; border-radius: 16px; padding: 1px 3px 1px 1px !important; color: #7eaaff !important; font-size: 2.6cqw !important; font-weight: 700 !important; white-space: nowrap; }
+.index-chat b { display: flex; align-items: center; justify-content: center; height: 4.4cqw; padding: 0 3px; background: #3a4eaa; border-radius: 20px; color: #e0e8ff; }
+.index-chat > span { padding-left: 2px; }
+.market-values { display: flex; align-items: center; justify-content: space-between; flex: 1; min-width: 0; margin-left: 3.3cqw; font-size: 3.55cqw !important; font-weight: 500 !important; letter-spacing: -.15px; }
+.market-values > span:first-child { margin-right: auto; }
+.market-values > span + span { margin-left: 7.1cqw; }
+.bottom-nav { height: 25.3cqw; display: flex; align-items: flex-start; justify-content: space-between; gap: 2cqw; padding: 1.7cqw 1.6cqw 0; }
+.bottom-nav > button { height: 13.4cqw; white-space: nowrap; color: #646464; font-size: 3.55cqw; font-weight: 700; }
+.bottom-nav > button.active { color: #fff; }
+.bottom-nav .menu-button { width: 13.4cqw; flex-shrink: 0; border-radius: 4px; background: #323232; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1px; font-size: 2.9cqw; }
+.menu-button svg { height: 24px; }
+.toast { position: absolute; left: 20px; right: 20px; padding: 13px 15px; color: #fff; background: #383838; border: 1px solid #555; box-shadow: 0 3px 18px #0006; border-radius: 8px; font-size: 13px; line-height: 1.5; text-align: center; z-index: 65; animation: toast-in 180ms ease-out; }
+.spinning { animation: spin .65s ease-in-out infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }
+.alternate-content { padding: 15px 12px; }
+.alternate-content h2 { font-size: 18px; margin-bottom: 20px; }
+.alternate-content > p { padding: 65px 0; text-align: center; color: #888; }
+.amount-line { display: flex; justify-content: space-between; align-items: center; min-height: 51px; border-bottom: 1px solid #373737; font-size: 15px; }
+.simple-table { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #444; }
+.device-screen:has(.kiwoom) .bottom-sheet { background: #202020; color: #ddd; border: 1px solid #454545; font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; }
+.device-screen:has(.kiwoom) .sheet-title { color: #eee; }
+.device-screen:has(.kiwoom) .sheet-description { font-size: 11px; color: #999; }
+.device-screen:has(.kiwoom) .sheet-handle { background: #606060; }
+.kiwoom-sheet { font-size: 15px; line-height: 1.6; padding-bottom: 22px; }
+.kiwoom-sheet .sheet-close { position: absolute; top: 20px; right: 17px; padding: 8px; }
+.kiwoom-sheet p { margin-bottom: 16px; }
+.kiwoom-sheet .sheet-option { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 18px 0; text-align: left; border-bottom: 1px solid #383838; }
+.sheet-option svg { color: #dd438c; }
+.kiwoom-sheet .sheet-primary, .kiwoom .sheet-primary { width: 100%; padding: 14px; margin-top: 18px; border-radius: 5px; background: #b42e73; color: white; font-weight: 700; }
+.sheet-account { font-size: 20px; padding-bottom: 8px; }
+.sheet-account small { font-size: 13px; margin-left: 10px; color: #999; }
+.sheet-empty { padding: 35px 0; text-align: center; color: #aaa; }
+.setting-line { display: flex; justify-content: space-between; align-items: center; padding: 17px 0; }
+.setting-line button { padding: 8px 14px; border: 1px solid #555; }
+.setting-line .chosen { color: #f161aa; border-color: #c6387b; background: #39212e; }
+.point-right { transform: rotate(-90deg); }
+@media (prefers-reduced-motion: reduce) { .spinning, .toast { animation: none; } }
+
+/* Final alignment against the supplied account screen. */
+.top-tabs { position: absolute; left: 13.2cqw; right: 14.4cqw; height: auto; gap: 0; }
+.main-header .more { margin-left: auto; }
+.market-values { display: grid; grid-template-columns: 1fr 1.35fr .9fr 1.15fr; gap: 0; }
+.market-values > span { text-align: right; }
+.market-values > span:first-child { text-align: left; margin-right: 0; }
+.market-values > span + span { margin-left: 0; }
+.sell { width: 19.3cqw; }
+.credit-toggle { margin-left: -.8cqw; }
+.tools img { width: 18px; height: 18px; object-fit: contain; }
+
+/* A sibling of .kiwoom escapes its container stacking context and stays above sheets. */
+.ai-launcher {
+  position: absolute;
+  z-index: 100;
+  right: 16px;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgb(239 166 211 / .28), rgb(154 51 112 / .36) 55%, rgb(125 108 185 / .24));
+  background-color: transparent;
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  color: #fff;
+  font: 700 17px/1 'Noto Sans KR', sans-serif;
+  letter-spacing: -.3px;
+  box-shadow: none;
+  text-shadow: none;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 120ms ease, background-color 220ms ease;
+}
+/* A fixed glass reflection sits below the icon and above the translucent tint. */
+.ai-launcher::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at 27% 8%, rgb(255 255 255 / .3), transparent 52%), linear-gradient(135deg, transparent 55%, rgb(233 207 255 / .09) 80%, rgb(255 255 255 / .16));
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / .45), inset 0 -1px 2px rgb(255 255 255 / .16), 0 5px 16px rgb(0 0 0 / .24);
+  pointer-events: none;
+}
+/* Only the thin border rotates; the icon and hit area stay still. */
+.ai-launcher::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg, #ef86be40 0deg, #ef86be40 150deg, #b49bff 220deg, #b3ecff 265deg, #fff0fa 285deg, #ef86be40 340deg);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: ai-border-orbit 4s linear infinite;
+}
+@keyframes ai-border-orbit { to { transform: rotate(360deg); } }
+/* Keep the AI icon visible while the glass tint deepens on interaction. */
+.ai-launcher-icon { position: absolute; inset: 0; display: grid; place-items: center; width: 54px; height: 54px; pointer-events: none; }
+.ai-launcher-icon svg { display: block; width: 34px; height: 34px; flex-shrink: 0; }
+@media (hover: hover) {
+  .ai-launcher:hover { background-color: #702044; }
+}
+.ai-launcher:focus-visible { background-color: #702044; }
+.ai-launcher:active { background-color: #541633; transform: scale(.96); }
+.ai-launcher:focus-visible { outline: 2px solid #fff !important; outline-offset: 4px; }
+.kiwoom.ai-landing { background: #111; animation: landing-in 180ms ease-out; }
+.landing-header { padding-top: 54px; height: 109px; flex-shrink: 0; }
+.kiwoom .landing-back { width: 52px; height: 48px; }
+@keyframes landing-in { from { opacity: 0; transform: translateX(12px); } }
+@media (prefers-reduced-motion: reduce) {
+  .ai-launcher { transition: none; }
+  .kiwoom.ai-landing, .ai-launcher::after { animation: none; }
+}
+
+/* Christian chapel, isolated angel, and live text are independent visual components. */
+.kiwoom.confession-landing { background: #150e19; color: #faf5f6; animation: none; }
+.confession-scroll { flex: 1; min-height: 0; }
+.confession-scene { position: relative; min-height: 217cqw; overflow: hidden; isolation: isolate; }
+.confession-art { position: absolute; z-index: -1; top: 8cqw; left: 0; width: 100%; height: auto; max-width: none; pointer-events: none; user-select: none; }
+.confession-header { position: absolute; z-index: 3; top: 52px; left: 18px; right: 18px; height: 44px; display: flex; align-items: center; gap: 14px; pointer-events: none; }
+.confession-header button { width: 40px; height: 44px; flex-shrink: 0; pointer-events: auto; }
+.confession-header span { font-size: 18px; font-weight: 700; }
+.confession-heading { position: absolute; top: 26cqw; left: 6cqw; right: 5cqw; }
+.confession-heading h1 { margin: 0; font-family: 'Noto Serif KR', 'AppleMyungjo', serif; font-size: 9.4cqw; font-weight: 700; line-height: 1.4; letter-spacing: -.065em; }
+.confession-heading h1 em { font-style: normal; font-size: 8.7cqw; color: #f7d38d; white-space: nowrap; }
+.confession-description { position: absolute; top: 55cqw; left: 6cqw; right: 5cqw; }
+.confession-description p { margin: 0; color: #c5beca; font-size: 3.75cqw; line-height: 1.5; letter-spacing: -.045em; }
+.confession-topics { position: absolute; top: 150cqw; left: 5cqw; right: 5cqw; display: flex; gap: 2cqw; }
+.kiwoom .confession-topic { display: flex; align-items: center; justify-content: space-between; gap: 5px; width: 100%; min-height: 18cqw; padding: 9px; border: 1px solid #a67e91; border-radius: 21px; background: rgb(24 17 30 / .88); text-align: left; font-size: 3.3cqw; line-height: 1.5; letter-spacing: -.055em; transition: background 160ms ease, border-color 160ms ease; }
+.confession-topic-icon { width: 32px; height: 36px; flex-shrink: 0; display: grid; place-items: center; background: #4c344e; border: 1px solid #72556f; border-radius: 50%; color: #edaaed; }
+.confession-topic > svg { flex-shrink: 0; width: 15px; }
+.kiwoom .confession-topic.is-selected { background: #5b244e; border-color: #ff8bdd; }
+.confession-motto { position: absolute; top: 173cqw; left: 6cqw; right: 6cqw; text-align: center; color: #c0b7ca; }
+.confession-motto p { margin: 0; font-size: 3.55cqw; line-height: 1.5; }
+.confession-motto > span { display: flex; align-items: center; gap: 8px; justify-content: center; color: #e9c477; margin-top: 6px; }
+.confession-motto > span::before, .confession-motto > span::after { content: ''; width: 66px; height: 1px; background: #927d87; }
+.confession-actions { position: absolute; top: 185cqw; left: 5.5cqw; right: 5.5cqw; text-align: center; }
+.kiwoom .confession-primary { position: relative; width: 100%; min-height: 56px; display: flex; align-items: center; justify-content: center; gap: 24px; padding: 14px 18px; border-radius: 18px; border: 1px solid #f46bb9; background: linear-gradient(135deg,#f52dac,#da057d); color: white; font-size: 19px; font-weight: 700; box-shadow: 0 0 25px #c2087c4d, inset 0 1px 1px #ffffff40; }
+.confession-primary > svg { position: absolute; right: 20px; }
+.kiwoom .confession-records { min-height: 48px; margin-top: 6px; font-size: 14px; color: #bfb7c7; text-decoration: underline; text-underline-offset: 5px; }
+.kiwoom .confession-saved-link { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; width: 100%; font-size: 12px; color: #edb3df; }
+.confession-scene:has(.confession-saved-link) { min-height: 230cqw; }
+.device-screen:has(.confession-landing) .bottom-sheet { background: #211824; border-color: #584150; color: #f3ebf2; }
+.device-screen:has(.confession-landing) .sheet-title { font-size: 19px; line-height: 1.4; padding-right: 28px; }
+.confession-sheet { padding: 5px 0 28px; font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
+.confession-sheet button { font: inherit; color: inherit; cursor: pointer; }
+.confession-sheet-close { position: absolute; top: 15px; right: 14px; display: grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; }
+.confession-sheet-intro { color: #c1b7c5; margin: 0 0 18px; }
+.confession-trade { display: flex; flex-direction: column; gap: 6px; width: 100%; padding: 16px 0; border: 0; border-bottom: 1px solid #594151; background: transparent; text-align: left; }
+.confession-trade strong { display: flex; align-items: center; justify-content: space-between; font-size: 18px; }
+.confession-trade small, .confession-trade > span { color: #bfb2c4; }
+.confession-trade .confession-example { color: #ed9ccf; font-size: 11px; }
+.confession-dialogue { padding: 16px; background: #342338; border-radius: 16px; }
+.confession-dialogue > span { color: #e7afcd; font-size: 12px; }
+.confession-dialogue p { margin: 8px 0 0; }
+.confession-reasons { display: grid; gap: 9px; margin: 16px 0; }
+.confession-reasons button { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px; min-height: 51px; background: #271d2c; border: 1px solid #614658; border-radius: 12px; text-align: left; }
+.confession-reasons button.is-selected { background: #56233f; border-color: #ed84bf; }
+.confession-sheet .confession-sheet-primary { width: 100%; min-height: 52px; margin-top: 10px; padding: 13px 16px; border: 0; border-radius: 14px; background: #cc2b85; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 14px; }
+.confession-sheet-primary:disabled { opacity: .4; cursor: default; }
+.confession-result { text-align: center; padding: 18px 0 0; }
+.confession-result > svg { color: #f2c787; }
+.confession-result p { color: #d0bfce; margin: 16px 0; }
+.confession-result > strong { display: block; padding: 22px 18px; border: 1px solid #745067; border-radius: 16px; color: #fae4a8; font-family: 'Noto Serif KR', serif; font-size: 19px; line-height: 1.7; }
+.confession-result small { display: block; margin: 18px 0; color: #bdb0c2; }
+.confession-sheet-secondary { background: none; border: 0; min-height: 48px; color: #cbb9c8; }
+@media (hover: hover) { .kiwoom .confession-topic:hover { background: #412139; } .kiwoom .confession-primary:hover { filter: brightness(1.08); } }
+@media (prefers-reduced-motion: reduce) { .kiwoom .confession-topic { transition: none; } }
+
+.confession-landing button:focus-visible, .confession-sheet button:focus-visible { outline: 2px solid #ffb9de !important; outline-offset: 3px; }
+
+/* Stagger sections as units. Static header and background stay still. */
+.confession-reveal { animation: confession-rise 560ms cubic-bezier(.22,1,.36,1) both; }
+.confession-scene[data-ready="false"] .confession-reveal { animation-play-state: paused; }
+/* Keep animation-name stable across focus changes so entrance never replays on blur. */
+@keyframes confession-rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.confession-topics > .confession-reveal { width: calc(50% - 1cqw); }
+.confession-mascot { position: absolute; top: 81cqw; left: 8cqw; width: 84cqw; height: 65cqw; pointer-events: none; }
+.confession-mascot img { width: 100%; height: 100%; object-fit: contain; user-select: none; }
+.confession-greeting { position: absolute; z-index: 1; top: 72cqw; right: 6cqw; padding: 3cqw 4cqw 2cqw; border: 1px solid #e9c787; border-radius: 17px 17px 17px 4px; background: linear-gradient(140deg,#fff0d3,#efd3a0); color: #372139; box-shadow: 0 5px 20px #0003; }
+.confession-greeting::after { content: ''; position: absolute; bottom: -10px; left: 16px; border-top: 11px solid #efd3a0; border-right: 12px solid transparent; }
+.confession-greeting p { margin: 0; font-family: 'Noto Serif KR', serif; font-size: 3.7cqw; line-height: 1.6; letter-spacing: -.05em; }
+@media (prefers-reduced-motion: reduce) {
+  .confession-reveal { animation: none; opacity: 1; transform: none; }
+}
+
+.confession-topic > span:nth-child(2) { white-space: nowrap; }
+
+/* Full-screen conversation; composer follows the shared mobile keyboard inset. */
+.kiwoom.confession-chat { background: #18121d; color: #f5edf6; animation: chat-page-up 420ms cubic-bezier(.22,1,.36,1) both; }
+@keyframes chat-page-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.chat-header { position: absolute; top: 0; left: 0; right: 0; z-index: 3; display: flex; align-items: center; gap: 10px; padding: 0 18px 15px; background: #18121d; border-bottom: 1px solid #ffffff0d; }
+.chat-header .icon-button { width: 34px; height: 50px; flex-shrink: 0; }
+.chat-header strong { font-size: 18px; }
+.chat-header span { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 11px; color: #bbaabc; }
+.chat-header i { width: 5px; height: 5px; border-radius: 50%; background: #efa4d5; }
+.chat-history { padding: 0 20px 184px; }
+.chat-demo-note { margin: 0 0 24px; color: #a293a9; font-size: 10px; text-align: center; }
+.chat-messages { display: flex; flex-direction: column; gap: 23px; }
+.chat-message { max-width: 94%; animation: chat-message-in 240ms ease-out; }
+.chat-message-user { align-self: flex-end; max-width: 86%; }
+.chat-author { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #edacd5; margin-bottom: 9px; }
+.chat-bubble { padding: 17px; border: 1px solid #ffffff0c; border-radius: 4px 19px 19px; background: #2b2131; }
+.chat-bubble p { margin: 0; color: #f1e8f3; font-size: 14px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.chat-message-user .chat-bubble { background: #80335f; border-radius: 19px 4px 19px 19px; }
+.chat-suggestions { display: grid; gap: 9px; margin: 27px 0 8px; }
+.chat-suggestions p { font-size: 11px; line-height: 1.6; color: #b6a5be; margin: 0 0 3px; }
+.kiwoom .chat-suggestions button { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 46px; padding: 12px 14px; border: 1px solid #64485e; border-radius: 13px; text-align: left; color: #dbc9df; font-size: 12px; line-height: 1.5; }
+.kiwoom .chat-suggestions button.is-selected { background: #45243b; border-color: #e98abd; }
+.chat-suggestions svg { flex-shrink: 0; }
+.chat-composer { position: absolute; z-index: 4; left: 0; right: 0; padding: 12px 17px 10px; background: #201726; border-top: 1px solid #483343; transition: bottom 260ms cubic-bezier(.2,.8,.2,1); }
+.chat-input-wrap { border: 1px solid #665168; background: #2a2031; border-radius: 14px; padding: 11px 12px; }
+.chat-input-wrap:focus-within { border-color: #df86be; }
+.chat-input-wrap textarea { display: block; width: 100%; padding: 0; border: 0; outline: none; resize: none; background: transparent; color: #f7eff8; font: inherit; font-size: 14px; line-height: 1.5; }
+.chat-input-wrap textarea::placeholder { color: #ae9ab7; font-size: 12px; }
+.chat-composer-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.chat-composer-actions > span { font-size: 10px; color: #a995b4; }
+.kiwoom .chat-composer-actions button { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 40px; padding: 10px 15px; border-radius: 11px; font-size: 12px; font-weight: 700; color: white; background: #c52f85; }
+.kiwoom .chat-composer-actions button:disabled { background: #443344; color: #a08caa; cursor: default; }
+.chat-principle { margin-top: 18px; padding-top: 16px; border-top: 1px solid #685065; }
+.chat-principle > span { font-size: 10px; color: #d4b880; }
+.chat-principle strong { display: block; margin-top: 8px; color: #f5d89b; font-size: 16px; line-height: 1.7; }
+.kiwoom .chat-principle button { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 44px; margin-top: 18px; padding: 10px; background: #503445; border: 1px solid #79546b; border-radius: 10px; font-size: 11px; }
+.chat-thinking { margin: 24px 0 0; padding: 26px 16px; border: 1px solid #63405a; border-radius: 20px; background: radial-gradient(ellipse at top,#48243d,#261b2c 75%); text-align: center; animation: chat-message-in 240ms ease-out; }
+.chat-thinking-orbit { position: relative; width: 54px; height: 54px; display: grid; place-items: center; color: #f0b1d8; margin: 0 auto 16px; }
+.chat-thinking-orbit::before { content: ''; position: absolute; inset: 0; border: 1.5px solid #f393cb30; border-top-color: #f6b7e4; border-right-color: #b88be8; border-radius: 50%; animation: ai-border-orbit 1.5s linear infinite; }
+.chat-thinking-orbit svg { animation: chat-pulse 1.5s ease-in-out infinite; }
+.chat-thinking strong { display: flex; justify-content: center; align-items: center; gap: 7px; font-size: 14px; }
+.chat-thinking p { color: #bda9c7; font-size: 11px; line-height: 1.6; margin: 10px 0 0; }
+.chat-typing-dots { display: inline-flex; gap: 3px; }
+.chat-typing-dots i { width: 3px; height: 3px; background: #e8a0cc; border-radius: 50%; animation: chat-pulse 1.2s ease-in-out infinite; }
+.chat-typing-dots i:nth-child(2) { animation-delay: .15s; }
+.chat-typing-dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes chat-pulse { 50% { opacity: .35; transform: translateY(-3px); } }
+@keyframes chat-message-in { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) {
+  .kiwoom.confession-chat, .chat-message, .chat-thinking, .chat-thinking-orbit::before, .chat-thinking-orbit svg, .chat-typing-dots i { animation: none; }
+  .chat-composer { transition: none; }
+}
+/* Keep the phone canvas fixed through navigation and sheet focus restoration. */
+.device-screen:has(.kiwoom) { overflow: clip; }
+/* Preserve landing state/entrance while chat is open; hidden content cannot intercept taps. */
+.kiwoom.confession-landing[data-covered="true"] { visibility: hidden; pointer-events: none; }
