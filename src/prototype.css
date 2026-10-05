@@ -368,56 +368,57 @@
 .saved-check { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; margin: 6px auto 22px; background: #573049; color: #ffd3ed; }
 .saved-card h2 { font-size: 21px; }
 .saved-card .flow-primary { width: 100%; margin-top: 24px; }
-.principles-content { padding: 0 21px 150px; }
-.principles-intro { margin: 10px 0 27px; }
-.principles-intro > span { font-size: 10px; letter-spacing: .15em; color: #c68caf; }
-.principles-intro h1 { font-size: 24px; font-family: 'Noto Serif KR',serif; font-weight: 700; line-height: 1.7; letter-spacing: -.05em; margin: 12px 0; }
-.principles-intro em { font-style: normal; color: #f4d79d; }
-.principles-intro p { color: #bba9c3; font-size: 12px; }
+.kiwoom.principles-page { background: #111418; color: #eff1f4; animation: chat-page-up 420ms cubic-bezier(.22,1,.36,1) both; }
+.principles-page .chat-header { background: #111418; border-bottom: 0; }
+.principles-page .chat-header span { color: #9298a3; margin-top: 6px; }
+.principles-content { padding: 0 20px 150px; }
 .principles-list { display: grid; gap: 14px; }
-.kiwoom .principle-list-card { display: block; width: 100%; text-align: left; padding: 19px; border: 1px solid #58415a; border-radius: 19px; background: #2b2032; }
-.principle-card-top { display: flex; align-items: center; gap: 9px; color: #b09db9; margin-bottom: 14px; }
-.principle-card-top b { color: #ecc394; font-size: 14px; }
+.kiwoom .principle-list-card { display: block; width: 100%; text-align: left; padding: 23px; border: 1px solid #31363f; border-radius: 20px; background: #1e232b; }
+.principle-card-top { display: flex; align-items: center; gap: 10px; color: #959daa; margin-bottom: 19px; }
+.principle-card-top b { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 8px; background: #303640; color: #e8ebf0; font-size: 11px; }
 .principle-card-top small { font-size: 10px; }
-.principle-card-top svg { margin-left: auto; }
-.principle-list-card > strong { display: block; font-size: 16px; line-height: 1.8; color: #f8e8f2; white-space: pre-wrap; overflow-wrap: anywhere; }
-.principle-category { display: inline-block; font-size: 10px; padding: 5px 9px; margin-top: 13px; border-radius: 7px; color: #e5b4d2; background: #503044; }
-.principle-list-card p { margin: 12px 0 0; font-size: 11px; line-height: 1.7; color: #b9a6c0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.principles-footer { position: absolute; z-index: 4; left: 0; right: 0; padding: 16px 21px 12px; background: #18121df5; border-top: 1px solid #ffffff0d; transition: bottom 260ms cubic-bezier(.2,.8,.2,1); }
+.principle-card-top svg { margin-left: auto; color: #808997; }
+.principle-list-card > strong { display: block; font-size: 17px; font-weight: 500; line-height: 1.8; color: #f1f3f6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.principle-category { display: inline-block; font-size: 10px; padding: 5px 9px; margin-top: 17px; border-radius: 7px; color: #efb2d4; background: #47303f; }
+.principle-list-card p { margin: 16px 0 0; padding-top: 15px; border-top: 1px solid #343a44; font-size: 11px; line-height: 1.7; color: #a0a8b5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.principles-footer { position: absolute; z-index: 4; left: 0; right: 0; padding: 16px 20px 12px; background: #111418f5; border-top: 1px solid #ffffff08; transition: bottom 260ms cubic-bezier(.2,.8,.2,1); }
 .principles-footer .flow-primary { width: 100%; min-height: 54px; font-size: 13px; }
-.principles-empty { text-align: center; padding: 65px 0 45px; }
-.principles-empty > div { display: grid; place-items: center; width: 78px; height: 78px; margin: 0 auto 27px; border-radius: 25px; background: #36233a; color: #dfa3c8; }
-.principles-empty > span { font-size: 11px; color: #b393b5; }
-.principles-empty h1 { font-family: 'Noto Serif KR',serif; font-size: 23px; line-height: 1.8; color: #f5dba9; letter-spacing: -.06em; margin: 15px 0 20px; }
-.principles-empty p { color: #bcaac4; font-size: 12px; line-height: 1.9; }
-.principles-storage { margin: 28px 0 0; text-align: center; color: #9c87a5; font-size: 10px; line-height: 1.8; }
+.principles-empty { display: grid; justify-items: center; gap: 12px; text-align: center; padding: 52px 20px; border: 1px dashed #363e4a; border-radius: 20px; background: #1a1f26; color: #9ba4b2; }
+.principles-empty p { color: #a9b0bc; font-size: 13px; margin: 0; }
+.principles-storage { margin: 28px 0 0; text-align: center; color: #a0a8b5; font-size: 10px; line-height: 1.8; }
 .principle-detail { padding-top: 17px; }
-.principle-detail h1 { color: #f5dba9; font-family: 'Noto Serif KR',serif; font-size: 24px; line-height: 1.8; letter-spacing: -.04em; margin: 19px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-.principle-origin { margin-top: 30px; border-top: 1px solid #523a55; padding-top: 22px; }
-.principle-origin h2 { font-size: 13px; margin: 0 0 15px; color: #d8bfdc; }
-.principle-origin blockquote { margin: 0; padding: 15px; border-radius: 12px; background: #2b2131; font-size: 13px; line-height: 1.8; color: #e8d8eb; overflow-wrap: anywhere; }
-.principle-origin p { color: #b9a4c1; font-size: 12px; line-height: 1.9; margin: 15px 0; }
-.principle-origin .principle-previous { padding: 12px; border-left: 2px solid #9a6e91; font-size: 11px; }
-.principle-conversation { margin-top: 22px; padding: 15px; background: #241b2b; border-radius: 13px; }
-.principle-conversation summary { font-size: 12px; color: #ceabd2; cursor: pointer; min-height: 28px; }
+.principle-detail h1 { color: #f1f3f6; font-size: 24px; font-weight: 500; line-height: 1.8; letter-spacing: -.04em; margin: 19px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.principles-page .reflection-eyebrow { color: #a0a8b5; }
+.principle-origin { margin-top: 30px; border-top: 1px solid #343a44; padding-top: 22px; }
+.principle-origin h2 { font-size: 13px; margin: 0 0 15px; color: #c5cbd5; }
+.principle-origin blockquote { margin: 0; padding: 15px; border-radius: 12px; background: #1e232b; font-size: 13px; line-height: 1.8; color: #e0e4eb; overflow-wrap: anywhere; }
+.principle-origin p { color: #a0a8b5; font-size: 12px; line-height: 1.9; margin: 15px 0; }
+.principle-origin .principle-previous { padding: 12px; border-left: 2px solid #6a7587; font-size: 11px; }
+.principle-conversation { margin-top: 22px; padding: 15px; background: #1a1f26; border-radius: 13px; }
+.principle-conversation summary { font-size: 12px; color: #c1c9d5; cursor: pointer; min-height: 28px; }
 .principle-conversation div { margin-top: 16px; }
-.principle-conversation span { color: #987ca3; font-size: 10px; }
-.principle-conversation p { color: #bba5c4; font-size: 11px; line-height: 1.8; margin: 6px 0; }
-.principle-conversation blockquote { color: #e4d7ea; margin: 0; font-size: 12px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.principle-conversation span { color: #818b9b; font-size: 10px; }
+.principle-conversation p { color: #a0a8b5; font-size: 11px; line-height: 1.8; margin: 6px 0; }
+.principle-conversation blockquote { color: #dce1e9; margin: 0; font-size: 12px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
 .principle-manage { display: flex; gap: 15px; margin-top: 20px; }
-.kiwoom .principle-manage button { padding: 12px 8px; color: #be9ec6; font-size: 11px; text-decoration: underline; text-underline-offset: 4px; }
+.kiwoom .principle-manage button { padding: 12px 8px; color: #acb5c3; font-size: 11px; text-decoration: underline; text-underline-offset: 4px; }
 .principle-edit { margin-top: 24px; }
-.principle-edit label { display: block; color: #d3b3d9; font-size: 12px; margin-bottom: 10px; }
-.principle-edit > small { display: block; text-align: right; color: #ab90b6; font-size: 10px; margin-top: 6px; }
+.principle-edit label { display: block; color: #c1c9d5; font-size: 12px; margin-bottom: 10px; }
+.principle-edit > small { display: block; text-align: right; color: #8f99a8; font-size: 10px; margin-top: 6px; }
+.principle-edit .chat-input-wrap { background: #1e232b; border-color: #495262; }
+.principle-edit .chat-input-wrap textarea { color: #eff1f4; }
+.principle-edit .chat-input-wrap:focus-within { border-color: #d881b7; }
 .principle-delete { margin-top: 18px; padding: 17px; border: 1px solid #9b5b7d; border-radius: 14px; }
 .principle-delete p { color: #e6c2d4; font-size: 12px; line-height: 1.8; margin: 0 0 16px; }
-.principles-notice { color: #f5c9e7; background: #42253a; font-size: 12px; padding: 12px; border-radius: 10px; }
-.confession-chat button:focus-visible { outline: 2px solid #f2b4da; outline-offset: 3px; }
+.principles-page .flow-secondary { background: #1e232b; border-color: #495262; color: #e0e4eb; }
+.principles-page .flow-text { color: #acb5c3; }
+.principles-notice { color: #d6dde8; background: #272e38; font-size: 12px; padding: 12px; border-radius: 10px; }
+.confession-chat button:focus-visible, .principles-page button:focus-visible { outline: 2px solid #f2b4da; outline-offset: 3px; }
 @media (hover: hover) {
   .kiwoom .flow-primary:hover { background: #d93d97; }
-  .kiwoom .principle-list-card:hover { border-color: #a27197; background: #332539; }
+  .kiwoom .principle-list-card:hover { border-color: #647084; background: #262d38; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .reflection-card { animation: none; }
+  .reflection-card, .kiwoom.principles-page { animation: none; }
   .principles-footer { transition: none; }
 }
