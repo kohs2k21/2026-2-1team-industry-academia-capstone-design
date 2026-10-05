@@ -11,3 +11,6 @@ playwright-report/
 
 # Local QA captures and supplied reference images
 qa/
+
+# Local development documentation
+/docs/
