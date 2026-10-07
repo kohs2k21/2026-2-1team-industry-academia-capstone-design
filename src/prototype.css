@@ -374,12 +374,35 @@
 .principles-content { padding: 0 20px 150px; }
 .principles-list { display: grid; gap: 14px; }
 .kiwoom .principle-list-card { display: block; width: 100%; text-align: left; padding: 23px; border: 1px solid #31363f; border-radius: 20px; background: #1e232b; }
-.principle-card-top { display: flex; align-items: center; gap: 10px; color: #959daa; margin-bottom: 19px; }
+.principle-card-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: #959daa; margin-bottom: 19px; }
+.principle-card-date { display: flex; align-items: center; gap: 8px; }
 .principle-card-top b { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 8px; background: #303640; color: #e8ebf0; font-size: 11px; }
 .principle-card-top small { font-size: 10px; }
-.principle-card-top svg { margin-left: auto; color: #808997; }
+.principle-card-top > .principle-badge { margin-left: auto; }
 .principle-list-card > strong { display: block; font-size: 17px; font-weight: 500; line-height: 1.8; color: #f1f3f6; white-space: pre-wrap; overflow-wrap: anywhere; }
-.principle-category { display: inline-block; font-size: 10px; padding: 5px 9px; margin-top: 17px; border-radius: 7px; color: #efb2d4; background: #47303f; }
+.principle-badge { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; padding: 6px 8px; border: 1px solid var(--badge-border); border-radius: 9px; color: var(--badge-color); background: var(--badge-bg); font-size: 10px; line-height: 1.3; white-space: nowrap; }
+.principle-badge svg { flex-shrink: 0; }
+.badge-follow { --badge-color: #f2badc; --badge-bg: #392637; --badge-border: #66445d; }
+.badge-rush { --badge-color: #f6c69d; --badge-bg: #392b23; --badge-border: #68503b; }
+.badge-missing { --badge-color: #a9cfff; --badge-bg: #222e40; --badge-border: #3c5676; }
+.badge-confidence { --badge-color: #d5baff; --badge-bg: #30263e; --badge-border: #584671; }
+.badge-recovery { --badge-color: #f5aeaf; --badge-bg: #3d262b; --badge-border: #6f444c; }
+.badge-concentration { --badge-color: #f1d694; --badge-bg: #373222; --badge-border: #665b39; }
+.badge-none { --badge-color: #9ee1c4; --badge-bg: #21372e; --badge-border: #3d6855; }
+.badge-unsure { --badge-color: #bac3cf; --badge-bg: #292f38; --badge-border: #4c5563; }
+.principle-detail > .principle-badge { margin-top: 17px; }
+.principle-badge-summary { margin-bottom: 24px; padding: 18px 16px; border: 1px solid #303742; border-radius: 18px; background: #191e25; }
+.badge-summary-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.badge-summary-heading h2 { font-size: 14px; font-weight: 500; margin: 0; color: #eff1f4; }
+.badge-summary-heading > span { font-size: 11px; color: #c2cbd7; }
+.principle-badge-summary > p { font-size: 10px; color: #99a4b3; margin: 8px 0 16px; line-height: 1.6; }
+.badge-summary-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 12px; padding: 0; margin: 0; list-style: none; }
+.badge-summary-list li { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-width: 0; }
+.badge-summary-list .principle-badge { padding: 5px 6px; font-size: 9px; gap: 4px; }
+.badge-summary-list strong { color: #e1e6ed; font-size: 12px; font-weight: 500; white-space: nowrap; }
+.badge-summary-list strong span { font-size: 9px; font-weight: 400; color: #98a3b3; margin-left: 2px; }
+.badge-count-empty .principle-badge { color: #929ca9; background: transparent; border-color: #363f4b; }
+.badge-count-empty strong { color: #7c8796; }
 .principle-list-card p { margin: 16px 0 0; padding-top: 15px; border-top: 1px solid #343a44; font-size: 11px; line-height: 1.7; color: #a0a8b5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .principles-footer { position: absolute; z-index: 4; left: 0; right: 0; padding: 16px 20px 12px; background: #111418f5; border-top: 1px solid #ffffff08; transition: bottom 260ms cubic-bezier(.2,.8,.2,1); }
 .principles-footer .flow-primary { width: 100%; min-height: 54px; font-size: 13px; }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
-import { ArrowLeftIcon, ArrowRightIcon, UsersIcon, CoinsIcon, CaretRightIcon, BookmarkSimpleIcon, SparkleIcon, ArrowsClockwiseIcon, CaretDownIcon, CaretUpIcon, CheckIcon, DotsThreeVerticalIcon, GearSixIcon, ListIcon, MicrophoneIcon, TriangleIcon, XIcon } from '@phosphor-icons/react';
+import { ArrowLeftIcon, ArrowRightIcon, UsersIcon, CoinsIcon, CaretRightIcon, BookmarkSimpleIcon, SparkleIcon, ArrowsClockwiseIcon, CaretDownIcon, CaretUpIcon, CheckIcon, DotsThreeVerticalIcon, GearSixIcon, ListIcon, MicrophoneIcon, TriangleIcon, XIcon, HourglassIcon, CompassIcon, EyeIcon, TargetIcon, ShieldCheckIcon, QuestionIcon } from '@phosphor-icons/react';
 import '@fontsource/noto-sans-kr/400.css';
 import '@fontsource/noto-sans-kr/500.css';
 import '@fontsource/noto-sans-kr/700.css';
@@ -218,6 +218,35 @@ const principleCategories: { id: PrincipleCategory; name: string; description: s
   { id: 'unsure', name: '조금 더 돌아볼 선택', description: '지금 이야기만으로는 선택의 이유를 단정하기 어려워요. 직접 맞는 정리를 골라도 괜찮아요.', principle: '다음 거래 전에 내가 선택하는 이유를 한 줄로 적기.' },
 ];
 function categoryFor(id: PrincipleCategory) { return principleCategories.find(item => item.id === id)!; }
+const principleBadges = {
+  follow: { label: '뇌동매매죄', Icon: UsersIcon },
+  rush: { label: '조급매수죄', Icon: HourglassIcon },
+  missing: { label: '기준실종죄', Icon: CompassIcon },
+  confidence: { label: '확신과잉죄', Icon: EyeIcon },
+  recovery: { label: '손실만회죄', Icon: ArrowsClockwiseIcon },
+  concentration: { label: '집중과잉죄', Icon: TargetIcon },
+  none: { label: '원칙 지킴', Icon: ShieldCheckIcon },
+  unsure: { label: '판단 보류', Icon: QuestionIcon },
+};
+function PrincipleBadge({ category }: { category: PrincipleCategory }) {
+  const { label, Icon } = principleBadges[category];
+  return <span className={`principle-badge badge-${category}`}><Icon size={13} weight="duotone" aria-hidden="true" /><span>{label}</span></span>;
+}
+function PrincipleBadgeSummary({ principles }: { principles: InvestmentPrinciple[] }) {
+  // Derive totals from saved records so edits never add counts and deletion removes them.
+  const counts = principles.reduce<Partial<Record<PrincipleCategory, number>>>((totals, item) => {
+    totals[item.category] = (totals[item.category] || 0) + 1;
+    return totals;
+  }, {});
+  return <section className="principle-badge-summary" aria-label="투자 원칙 뱃지 누적 기록">
+    <div className="badge-summary-heading"><h2>쌓인 고해 기록</h2><span>총 {principles.length}회</span></div>
+    <p>저장한 투자 원칙마다 하나씩 쌓여요.</p>
+    <ul className="badge-summary-list">{principleCategories.map(({ id }) => {
+      const count = counts[id] || 0;
+      return <li key={id} className={count === 0 ? 'badge-count-empty' : ''}><PrincipleBadge category={id} /><strong aria-label={`${count}회`}>{count}<span>회</span></strong></li>;
+    })}</ul>
+  </section>;
+}
 type ReflectionAnswer = { question: string; text: string; hint?: PrincipleCategory };
 type ReflectionResult = { category: PrincipleCategory; evidence: string; explanation: string };
 type InvestmentPrinciple = { id: string; text: string; category: PrincipleCategory; evidence: string; explanation: string; answers: ReflectionAnswer[]; createdAt: string; updatedAt: string; previousPrinciple?: string };
@@ -505,9 +534,10 @@ function InvestmentPrinciples({ principles, storageAvailable, onBack, onStart, o
     <header className="chat-header" style={{ paddingTop: device.geometry.safeArea.top }}><button ref={backRef} className="icon-button" aria-label={selected ? '투자 원칙 목록으로 돌아가기' : '고해성사 랜딩으로 돌아가기'} onClick={selected ? closeDetail : onBack}><ArrowLeftIcon size={24} /></button><div><strong>{selected ? '원칙 돌아보기' : '나의 투자 원칙'}</strong>{!selected && <span>{principles.length}개의 원칙</span>}</div></header>
     <MobileScroll className="principles-scroll"><div ref={scrollRef} className="principles-content" style={{ paddingTop: device.geometry.safeArea.top + 92 }}>
       {notice && <p className="principles-notice" role="status">{notice}</p>}
+      {!selected && <PrincipleBadgeSummary principles={principles} />}
       {!selected && principles.length === 0 && <section className="principles-empty"><BookmarkSimpleIcon size={28} weight="light" /><p>저장한 투자 원칙이 없어요.</p></section>}
-      {!selected && principles.length > 0 && <div className="principles-list">{principles.map((item, index) => <button className="principle-list-card" key={item.id} aria-label={`투자 원칙 ${index + 1}: ${item.text}`} onClick={() => { keyboard.hide(); setNotice(''); setSelectedId(item.id); }}><span className="principle-card-top"><b>{String(principles.length - index).padStart(2, '0')}</b><small>{principleDate(item.createdAt)}</small><CaretRightIcon size={18} /></span><strong>{item.text}</strong><span className="principle-category">{categoryFor(item.category).name}</span><p>{item.evidence}</p></button>)}</div>}
-      {selected && <article className="principle-detail"><span className="reflection-eyebrow">{principleDate(selected.createdAt)}에 남긴 원칙</span><h1>{selected.text}</h1><span className="principle-category">{categoryFor(selected.category).name}</span>
+      {!selected && principles.length > 0 && <div className="principles-list">{principles.map((item, index) => <button className="principle-list-card" key={item.id} aria-label={`투자 원칙 ${index + 1}, ${principleBadges[item.category].label}: ${item.text}`} onClick={() => { keyboard.hide(); setNotice(''); setSelectedId(item.id); }}><span className="principle-card-top"><span className="principle-card-date"><b>{String(principles.length - index).padStart(2, '0')}</b><small>{principleDate(item.createdAt)}</small></span><PrincipleBadge category={item.category} /></span><strong>{item.text}</strong><p>{item.evidence}</p></button>)}</div>}
+      {selected && <article className="principle-detail"><span className="reflection-eyebrow">{principleDate(selected.createdAt)}에 남긴 원칙</span><h1>{selected.text}</h1><PrincipleBadge category={selected.category} />
         {editing && <section className="principle-edit"><label htmlFor="principle-edit">나의 말로 다시 다듬기</label><div className="chat-input-wrap"><KeyboardTextarea id="principle-edit" aria-label="저장한 투자 원칙 수정" rows={3} maxLength={160} value={draft} onChange={event => setDraft(event.target.value)} onBlur={() => keyboard.hide()} onKeyDown={event => { if (event.key === 'Escape') keyboard.hide(); }} /></div><small>{draft.length}/160</small><button className="flow-text" onClick={() => { keyboard.hide(); setEditing(false); }}>수정 취소</button></section>}
         <section className="principle-origin"><h2>이 원칙이 시작된 이야기</h2><blockquote>“{selected.evidence}”</blockquote><p>{selected.explanation}</p>{selected.previousPrinciple && <p className="principle-previous">지난 원칙을 돌아보며 남겼어요<br />{selected.previousPrinciple}</p>}</section>
         <details className="principle-conversation"><summary>함께 나눈 대화 보기</summary>{selected.answers.map((answer, index) => <div key={index}><span>질문 {index + 1}</span><p>{answer.question}</p><blockquote>{answer.text}</blockquote></div>)}</details>
