@@ -165,7 +165,7 @@ function ConfessionBackdrop({ onReady }: { onReady: () => void }) {
 }
 
 function ConfessionTitle() {
-  return <ConfessionReveal className="confession-heading"><h1>평안이 함께하길,<br /><em>마음을 고백하세요.</em></h1></ConfessionReveal>;
+  return <ConfessionReveal className="confession-heading"><h1><em>마음을 고백하세요.</em></h1></ConfessionReveal>;
 }
 
 function ConfessionDescription() {
